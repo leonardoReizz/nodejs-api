@@ -1,44 +1,56 @@
-import MYSQL from "../../../services/mysql";
-import { User } from "../model/user";
+import { type ResultSetHeader } from "mysql2"
+import MYSQL from "../../../services/mysql/connection";
+import { User, UserResultSetHeader } from "../model/user";
 import { UserRepositoryInterface } from "./user.repository-interface";
 
 export class UserRepository implements UserRepositoryInterface {
-  async getById (id: string) {
+  getByEmail (email: string): Promise<Omit<User, "hashed_password"> | undefined> {
+    const sql = "SELECT id, first_name, last_name, email, created_at FROM users WHERE email = ?"
+    return new Promise<Omit<User, "hashed_password"> & ResultSetHeader | undefined>(async (resolve, reject) => {
+      MYSQL.query<Omit<UserResultSetHeader, "hashed_password">[]>(
+        sql,
+        [email],
+        (error, results) => {
+          if(error) {
+            reject(error)
+          } else{
+            resolve(results?.[0])
+          }
+        }
+      )
+    })
+  }  
+
+  getById (id: number) {
     const sql = "SELECT id, first_name, last_name, email, created_at FROM users WHERE id = ?"
-    
-    return new Promise<Omit<User, "hashed_password"> | null>((resolve, reject) => {
-      MYSQL.query(
+    return new Promise<Omit<User, "hashed_password"> | undefined>((resolve, reject) => {
+      MYSQL.query<UserResultSetHeader[]>(
         sql,
         [id],
         (error, results) => {
           if(error) {
             reject(error)
           } else{
-            if (results?.[0]) {
-              resolve(results?.[0])
-            } else {
-              resolve(null)
-            }
+            resolve(results?.[0])
           }
         }
       )
     })
-  
   }
 
-
-  async create(user: Omit<User, "created_at" | "id">) {
+  create(user: Omit<User, "created_at" | "id">) {
+    console.log(user)
     const sql = "INSERT INTO users (first_name, last_name, email,hashed_password) VALUES(?,?,?,?)"
 
-    return new Promise<Number>((resolve, reject) => {
-      MYSQL.query(
+    return new Promise<number>((resolve, reject) => {
+      MYSQL.query<ResultSetHeader>(
         sql, 
         [user.first_name, user.last_name, user.email, user.hashed_password],
         (error, results) => {
           if (error) {
             reject(error)
           } else {
-            resolve(1)
+            resolve(results.insertId)
           }
         }
       )
