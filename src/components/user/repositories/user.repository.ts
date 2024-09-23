@@ -19,7 +19,24 @@ export class UserRepository implements UserRepositoryInterface {
         }
       )
     })
-  }  
+  }
+  
+  getByEmailWithPassword (email: string): Promise<User | undefined> {
+    const sql = "SELECT * FROM users WHERE email = ?"
+    return new Promise<User | undefined>(async (resolve, reject) => {
+      MYSQL.query<UserResultSetHeader[]>(
+        sql,
+        [email],
+        (error, results) => {
+          if(error) {
+            reject(error)
+          } else{
+            resolve(results?.[0])
+          }
+        }
+      )
+    })
+  }
 
   getById (id: number) {
     const sql = "SELECT id, first_name, last_name, email, created_at FROM users WHERE id = ?"

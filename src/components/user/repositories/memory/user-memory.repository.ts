@@ -4,6 +4,11 @@ import { UserRepositoryInterface } from "../user.repository-interface"
 export class UserMemoryRepository implements UserRepositoryInterface {
     public users: User[] = []
     
+    async getByEmailWithPassword(email: string): Promise<User | undefined> {
+        const user = this.users.find((t) => t.email === email)
+        return user
+    }
+    
     async getByEmail(email: string): Promise<Omit<User, "hashed_password"> | undefined> {
         const user = this.users.find((t) => t.email === email)
         if (user) {
