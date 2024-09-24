@@ -1,3 +1,4 @@
+import { ResourceNotFoundException } from "../../../../errors/ResourceNotFoundException";
 import { generateHashedPassword } from "../../../../utils/generateHashedPassword";
 import { User } from "../../model/user";
 import { UserRepository } from "../../repositories/user.repository";
@@ -5,7 +6,9 @@ import { UserRepository } from "../../repositories/user.repository";
 export class GetUserUseCase {
   constructor (private userRepository: UserRepository){}
 
-  async execute(id: string): Promise<Omit<User, "hashed_password"> | null > {
-    return this.userRepository.getById(id)
+  async execute(id: number): Promise<Omit<User, "hashed_password"> | null > {
+    const user = await  this.userRepository.getById(id)
+    if(!user) throw new ResourceNotFoundException()
+    return user
   }
 }
