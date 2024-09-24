@@ -1,5 +1,5 @@
 import request from "supertest"
-import {app} from "../../../../server"
+import { app } from "../../../../server"
 import { CreateUserRequestDTO } from "./create-user.request-dto"
 import MYSQL from "../../../../services/mysql/connection"
 
@@ -15,7 +15,12 @@ describe("Create user controller", () => {
     const req = await request(app).post("/user").type("form").send(user).expect(200)
     expect(req?.body?.message?.id).toBeDefined()
     if(req?.body?.message?.id) {
-      MYSQL.query("DELETE FROM users WHERE id = ? ", [req.body.message.id])
+      return new Promise((resolve, reject) => {
+        MYSQL.query("DELETE FROM users WHERE id = ?", [req?.body?.message?.id], (err) => {
+          if (err) reject(err)
+          resolve(true)
+        })
+      })
     }
   })
 
