@@ -56,7 +56,6 @@ export class UserRepository implements UserRepositoryInterface {
   }
 
   create(user: Omit<User, "created_at" | "id">) {
-    console.log(user)
     const sql = "INSERT INTO users (first_name, last_name, email,hashed_password) VALUES(?,?,?,?)"
 
     return new Promise<number>((resolve, reject) => {
