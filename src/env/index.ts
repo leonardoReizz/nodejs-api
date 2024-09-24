@@ -2,6 +2,7 @@ import "dotenv/config"
 import { z } from "zod";
 
 const envScheme = z.object({
+  NODE_ENV: z.string(),
   JWT_SECRET: z.string(),
   MYSQL_HOST: z.string(),
   MYSQL_USER: z.string(),
