@@ -1,16 +1,15 @@
 import jwt from "jsonwebtoken";
 import { env } from "../env";
 
-export function generateJWT(role: string, userId: string) {
+export function generateJWT(userId: number) {
   const payload = {
-    role,
     userId,
   };
 
   const secretKey = env.JWT_SECRET;
 
   const options: jwt.SignOptions = {
-    expiresIn: "2h",
+    expiresIn: "8h",
   };
 
   const token = jwt.sign(payload, secretKey, options);
