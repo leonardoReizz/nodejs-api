@@ -8,23 +8,23 @@ export class AuthenticationUseCase {
   constructor(private userRepository: UserRepository) {}
 
   async execute(data: AuthenticationRequestDTO) {
-    const user = await this.userRepository.getByEmailWithPassword(data.email)
-    
-    if (!user){
-      throw new BadRequestException("Invalid email or password")
+    const user = await this.userRepository.getByEmailWithPassword(data.email);
+
+    if (!user) {
+      throw new BadRequestException("Invalid email or password");
     }
 
     const doesPasswordMatches = await compare(
       data.password,
-      user?.hashed_password
+      user?.hashed_password,
     );
 
     if (!doesPasswordMatches) {
-      throw new BadRequestException("Invalid email or password")
+      throw new BadRequestException("Invalid email or password");
     }
 
-    const { token } = generateJWT(user.id)
+    const { token } = generateJWT(user.id);
 
-    return { token }
+    return { token };
   }
 }

@@ -24,7 +24,7 @@ class App {
                 "http://localhost:3002",
               ]
             : [],
-      })
+      }),
     );
     this.express.use(express.json());
     this.express.use(bodyParser.urlencoded({ extended: false }));

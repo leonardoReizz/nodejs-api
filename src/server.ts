@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import app from "./app";
 import dotenv from "dotenv";
 import { ZodError } from "zod";
@@ -8,7 +8,7 @@ import { UnauthorizedException } from "./errors/UnauthorizedException";
 
 dotenv.config();
 
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((error: Error, req: Request, res: Response) => {
   if (error instanceof ZodError) {
     return res.status(400).json({
       message: "Validation error.",
@@ -31,7 +31,7 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   return res.status(500).json({ message: error.message });
 });
 
-if(env.NODE_ENV !== "test") {
+if (env.NODE_ENV !== "test") {
   app.listen(env.PORT, () => {
     console.log("Express connected, port: " + env.PORT);
   });

@@ -1,4 +1,4 @@
-import { ResultSetHeader } from "mysql2"
+import { ResultSetHeader } from "mysql2";
 
 export interface User {
   id: number;

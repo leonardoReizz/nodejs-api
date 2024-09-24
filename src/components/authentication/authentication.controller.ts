@@ -8,15 +8,15 @@ export class AuthenticationController {
   async handle(request: Request, response: Response, next: NextFunction) {
     const schema = z.object({
       email: z.string().email().max(100),
-      password: z.string().min(8).max(32)
+      password: z.string().min(8).max(32),
     });
 
     try {
-      const data = schema.parse(request.body)
-      const res = await this.authenticationUseCase.execute(data)
-      return response.status(200).json({message: res})
-    } catch(error) {
-      next(error)
+      const data = schema.parse(request.body);
+      const res = await this.authenticationUseCase.execute(data);
+      return response.status(200).json({ message: res });
+    } catch (error) {
+      next(error);
     }
   }
 }

@@ -1,5 +1,5 @@
-import mysql from "mysql2"
-import { env } from "../../env"
+import mysql from "mysql2";
+import { env } from "../../env";
 
 const MYSQL = mysql.createPool({
   host: env.MYSQL_HOST,
@@ -13,26 +13,28 @@ const MYSQL = mysql.createPool({
   queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 0,
-})
+});
 
-
-MYSQL.on('connection', () => {
+MYSQL.on("connection", () => {
   console.log("MySQL conectado");
 });
 
-MYSQL.on('error', (error) => {
+MYSQL.on("error", (error) => {
   console.error("Erro na conexão MySQL:", error);
 });
 
 async function checkConnection() {
   try {
-     MYSQL.query('SELECT 1', (err, rows) => {
-       console.log("Conexão com MySQL verificada:", rows);
-     });
+    MYSQL.query("SELECT 1", (err, rows) => {
+      if (err) {
+        throw err;
+      }
+      console.log("Conexão com MySQL verificada:", rows);
+    });
   } catch (error) {
     console.error("Erro ao verificar conexão MySQL:", error);
   }
 }
 
 checkConnection();
-export default MYSQL
+export default MYSQL;

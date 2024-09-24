@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { authenticationController } from "../components/authentication";
 
-const authenticationRoutes = Router()
+const authenticationRoutes = Router();
 
 authenticationRoutes.post("/", (request, response, next) => {
-  return authenticationController.handle(request, response, next)
-})
+  return authenticationController.handle(request, response, next);
+});
 
-export { authenticationRoutes }
+export { authenticationRoutes };
